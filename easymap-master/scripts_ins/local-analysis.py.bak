@@ -164,20 +164,20 @@ for c in contigs: 									 #a reads alignment finishes in each nucleotide, sepa
 			di_rd_right[i] = 1
 
 	#Writting in the output file
-	for key,value in sorted(list(di_left.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(di_left.items(), key=lambda i: int(i[0])):
 		f2.write('LOCAL\t' + c + '\t' + str(key) + '\t'+ str(value) + '\tLEFT\n')
 
-	for key,value in sorted(list(di_right.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(di_right.items(), key=lambda i: int(i[0])):
 		f2.write('LOCAL\t' + c + '\t' + str(key) + '\t'+ str(value) + '\tRIGHT\n')
 
-	for key,value in sorted(list(di_total.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(di_total.items(), key=lambda i: int(i[0])):
 		f2.write('LOCAL\t' + c + '\t' + str(key) + '\t'+ str(value) + '\tTOTAL\n')
 
-	for key,value in sorted(list(di_rd_total.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(di_rd_total.items(), key=lambda i: int(i[0])):
 		f2.write('LOCAL_RD\t' + c + '\t' + str(key) + '\t'+ str(value) + '\tTOTAL_RD\n')
 
-	for key,value in sorted(list(di_rd_left.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(di_rd_left.items(), key=lambda i: int(i[0])):
 		f2.write('LOCAL_RD\t' + c + '\t' + str(key) + '\t'+ str(value) + '\tLEFT_RD\n')
 
-	for key,value in sorted(list(di_rd_right.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(di_rd_right.items(), key=lambda i: int(i[0])):
 		f2.write('LOCAL_RD\t' + c + '\t' + str(key) + '\t'+ str(value) + '\tRIGHT_RD\n')

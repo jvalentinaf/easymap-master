@@ -61,4 +61,4 @@ try:
 except:
 	percentage_running = "The maximum number of simultaneous jobs allowed is not defined. Please define it in the file config/config."
 
-print str(percentage_size) + "," + str(percentage_running) + "," + str(size_limit) + "," + str(simultaneous_limit)
+print(str(percentage_size) + "," + str(percentage_running) + "," + str(size_limit) + "," + str(simultaneous_limit))

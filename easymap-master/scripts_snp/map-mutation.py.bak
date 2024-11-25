@@ -134,7 +134,7 @@ def chromosomal_position(size,space, SNP, ch, chromosomal_lenght, mode, modality
 	tmp_averages_list2 = []
 	
 	# Extract the AFs from a dictionary and place them in odered list
-	for key,value in sorted(list(dictionary_windows.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(dictionary_windows.items(), key=lambda i: int(i[0])):
 		tmp_averages_list1.append(value[0])
 
 	nbrSamplingPoints = len(tmp_averages_list1)
@@ -197,7 +197,7 @@ def chromosomal_position(size,space, SNP, ch, chromosomal_lenght, mode, modality
 
 	# Add the mean AF values back to the dictionary where I extracted them originally
 	i = 0
-	for key,value in sorted(list(dictionary_windows.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(dictionary_windows.items(), key=lambda i: int(i[0])):
 		#dictionary_windows[key].append(tmp_averages_list2[i])
 		dictionary_windows[key] = tmp_averages_list2[i]
 		i += 1

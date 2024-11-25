@@ -232,7 +232,7 @@ if len(template_lengths) == 0:
 unique_template_lenghts = list(set(template_lengths))
 num = len(unique_template_lenghts)
 if num > 1 and num != 1:
-	print('Warning: Not all the templates provided have the same length. The program assumes all the templates have the same length to distribute reads across them. Therefore, read depth may not be homogeneous across contigs. If this is a concern, please provide contigs with equal lengths.\nContinuing anyway.')
+	print 'Warning: Not all the templates provided have the same length. The program assumes all the templates have the same length to distribute reads across them. Therefore, read depth may not be homogeneous across contigs. If this is a concern, please provide contigs with equal lengths.\nContinuing anyway.'
 
 #Calculate the number of reads needed to reach the chosen read depth
 #Calculate the number of input template genomes provided by user and the number of reads needed

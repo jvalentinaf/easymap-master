@@ -2,7 +2,7 @@
 
 import argparse, math
 from PIL import Image, ImageDraw, ImageFont, ImageOps
-from io import StringIO
+from StringIO import StringIO
 
 #Common arguments
 parser = argparse.ArgumentParser()

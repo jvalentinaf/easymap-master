@@ -1,36 +1,27 @@
-#!src/Python-2.7.18/.localpython/bin/python2
 
-'''
-This file is mostly the same as config/allow-new-project.py. Several issues prevented
-me from using that script as aCGI script, so I finally duplicated the file and 
-modified it as necessary...
-'''
-
-import cgi, cgitb, subprocess, os
-cgitb.enable()
-
-print("Content-type:text/html\r\n\r\n")
+import subprocess
+import os
 
 # Get amount of data currently in user_data directory
-proc = subprocess.Popen("du -s user_data", shell=True, stdout=subprocess.PIPE)
+proc = subprocess.Popen("du -s ../user_data", shell=True, stdout=subprocess.PIPE)
 folder_size_output = proc.stdout.read()
 user_data_size_gb = float(float(folder_size_output.split("	")[0]) / 1048576)
 
 # Get amount of data currently in user_projects directory
-proc = subprocess.Popen("du -s user_projects", shell=True, stdout=subprocess.PIPE)
+proc = subprocess.Popen("du -s ../user_projects", shell=True, stdout=subprocess.PIPE)
 folder_size_output = proc.stdout.read()
 user_projects_size_gb = float(float(folder_size_output.split("	")[0]) / 1048576)
 
 user_files_size_gb = user_data_size_gb + user_projects_size_gb
 
 # Get number of projects currently running
-proc = subprocess.Popen("ls user_projects", shell=True, stdout=subprocess.PIPE)
+proc = subprocess.Popen("ls ../user_projects", shell=True, stdout=subprocess.PIPE)
 list_projects = proc.stdout.read().split()
 number_running_files = 0
 
 for project in list_projects:
 	try:
-		with open("user_projects/" + project + "/2_logs/status") as status:
+		with open("../user_projects/" + project + "/2_logs/status") as status:
 			for lines in status:
 				if lines[:6] =="status":
 					lines = lines.rstrip()
@@ -42,7 +33,7 @@ for project in list_projects:
 
 # Get configuration information from file /config/config
 n = 0
-with open("config/config") as con_file:
+with open("./config") as con_file:
 	for lines in con_file:
 		n += 1
 		if lines[:5] == "user_":
@@ -70,4 +61,4 @@ try:
 except:
 	percentage_running = "The maximum number of simultaneous jobs allowed is not defined. Please define it in the file config/config."
 
-print(str(percentage_size) + "," + str(percentage_running) + "," + str(size_limit) + "," + str(simultaneous_limit))
+print str(percentage_size) + "," + str(percentage_running) + "," + str(size_limit) + "," + str(simultaneous_limit)

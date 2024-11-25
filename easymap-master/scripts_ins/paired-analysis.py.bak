@@ -170,11 +170,11 @@ for c in contigs:
 						
 
 	#Finally we sort the dictionaries and write it to an output file	
-	for key,value in sorted(list(di_total.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(di_total.items(), key=lambda i: int(i[0])):
 		f2.write('PAIRED\t' +  c + '\t' + str(key) + '\t'+ str(value) + '\tTOTAL\n')
 
-	for key,value in sorted(list(di_f.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(di_f.items(), key=lambda i: int(i[0])):
 		f2.write('PAIRED\t' + c + '\t' + str(key) + '\t'+ str(value) + '\tF\n')
 	
-	for key,value in sorted(list(di_r.items()), key=lambda i: int(i[0])):
+	for key,value in sorted(di_r.items(), key=lambda i: int(i[0])):
 		f2.write('PAIRED\t' +  c + '\t' + str(key) + '\t'+ str(value) + '\tR\n')
