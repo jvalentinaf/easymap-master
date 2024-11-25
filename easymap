@@ -1,4 +1,4 @@
-#!./src/Python-2.7.18/.localpython/bin/python2
+#!./src/Python3/.localpython/bin/python3
 
 # ./easymap -n project_name -w snp -sim -r at -g chr1+4.gff -rs ref -cr bc -co par_mut -sm 600 -sr 0,14-1,31-2,33-3,15-4,5-5,2/0,24-1,42-2,25-3,6-4,1-5,2+1,5860210+100 -ss 25+100,0+500,100+1+50+se
 # ./easymap -n ins-test -w ins -sim -r at2 -i at_chloroplast.fa -g chr1+4.gff -sm 10 -ss 15+100,0+500,100+1+50+pe
@@ -47,7 +47,7 @@ args = parser.parse_args()
 generic_help_message = "Please refer to the documentation for comprehensive help."
 
 if args.usage:
-	print "Please see section 'easymap command line arguments' in the documentation."
+	print ("Please see section 'easymap command line arguments' in the documentation.")
 	quit()
 
 # Process the general arguments
@@ -73,11 +73,11 @@ if args.gff_file == "n/p":
 	problems.append("Argument -g/--gff-file is required.")
 
 if error == 1: 
-	print "=======================================================\nCOMMAND ERROR. Please fix the following issues:"
+	print ("=======================================================\nCOMMAND ERROR. Please fix the following issues:")
 	for items in problems:
-		print "-" + items
-	print generic_help_message
-	print "======================================================="
+		print(("-") + items)
+	print (generic_help_message)
+	print ("=======================================================")
 	quit()
 
 # Process other arguments
@@ -541,7 +541,7 @@ else:
 	stringency = "n/p"
 
 # This code checks the configuration of the program. It calls allow-new-project.py and checks its result.
-proc = subprocess.Popen("../src/Python-2.7.18/.localpython/bin/python2 allow-new-project.py", cwd=r'./config', shell=True, stdout=subprocess.PIPE)
+proc = subprocess.Popen("../src/Python3/.localpython/bin/python3 allow-new-project.py", cwd=r'./config', shell=True, stdout=subprocess.PIPE)
 script_response = proc.stdout.read()
 response = script_response.split(",")
 try:
@@ -558,11 +558,11 @@ except:
 
 
 if error == 1: 
-	print "=======================================================\nCOMMAND ERROR. Please fix the following issues:"
+	print ("=======================================================\nCOMMAND ERROR. Please fix the following issues:")
 	for items in problems:
-		print "-" + items
-	print generic_help_message
-	print "======================================================="
+		print(("-") + items)
+	print(generic_help_message)
+	print("=======================================================")
 	quit()	
 
 

@@ -1,4 +1,4 @@
-#!./src/Python-2.7.18/.localpython/bin/python2
+#!./src/Python3/.localpython/bin/python3
 
 import cgi, cgitb, os
 cgitb.enable() # For debugging only

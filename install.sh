@@ -2,43 +2,43 @@
 
 ################################################################################
 #
-# This script automates some the steps required after cloning or downloading
-# in order to make easymap ready for execution.
+# This script automates some of the steps required after cloning or downloading
+# in order to make Easymap ready for execution.
 #
 ################################################################################
 
 ################################################################################
 #
 # REQUIREMENTS:
-#	
-#	- To use Easymap through the command line
-#		- ...
+#   
+#   - To use Easymap through the command line
+#       - ...
 #
-#	- To use Easymap through the web interface
-#		- Web server that runs PHP
+#   - To use Easymap through the web interface
+#       - Web server that runs Python 3
 #
 ################################################################################
 
 # Deal with argument provided by user
 if ! [ $1 ]; then
-	echo 'Please provide an argument specifying the type of installation: "cli" or "server". Example: "./install.sh server"'
-	exit
+    echo 'Please provide an argument specifying the type of installation: "cli" or "server". Example: "./install.sh server"'
+    exit
 fi
 
 if ! [ $1 == server ] && ! [ $1 == cli ]; then
-	echo 'Please choose between "cli" and "server". Example: "./install.sh server"'
-	exit
+    echo 'Please choose between "cli" and "server". Example: "./install.sh server"'
+    exit
 fi
 
 if [ $1 == server ]; then
-	if ! [ $2 ]; then
-		port=8100
-	elif [ "$2" -ge 8100 ] && [ "$2" -le 8200 ]; then
-		port=$2
-	else
-		echo 'Please choose a port number between 8100 and 8200. Example: "./install.sh server 8100"'
-		exit
-	fi
+    if ! [ $2 ]; then
+        port=8100
+    elif [ "$2" -ge 8100 ] && [ "$2" -le 8200 ]; then
+        port=$2
+    else
+        echo 'Please choose a port number between 8100 and 8200. Example: "./install.sh server 8100"'
+        exit
+    fi
 fi
 
 ################################################################################
@@ -52,21 +52,35 @@ fi
 
 ################################################################################
 
-# Compile bcftools, bowtie, hisat and samtools
+# Install necessary dependencies for Python 3 and virtualenv
+sudo apt-get update
+sudo apt-get install python3 python3-pip python3-venv build-essential wget -y
 
+################################################################################
+
+# Install Python 3 virtual environment
+python3 -m venv easymap-env
+
+# Install Pillow with pip3
+[ -d cache ] || mkdir cache
+easymap-env/bin/pip3 install Pillow --cache-dir cache
+
+################################################################################
+
+# Compile necessary tools like bcftools, bowtie, hisat, and samtools
 cd ./htslib
 make clean
 make
 
-cd ../bcftools-1.3.1 
+cd ../bcftools-1.3.1
 make clean
 make
 
-cd ../bowtie2 
+cd ../bowtie2
 make clean
 make
 
-cd ../samtools1 
+cd ../samtools1
 make clean
 make
 
@@ -83,44 +97,24 @@ if [ -d src ]; then rm -rf src; fi
 mkdir src
 cd src
 
-# Get Python-2.7.18
-wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz
-tar -zxvf Python-2.7.18.tgz
-
-# Install Python-2.7.18
-cd Python-2.7.18
-[ -d .localpython ] || mkdir .localpython
-./configure --prefix=$PWD/.localpython
-make
-make install
-cd ..
-
-# Get virtualenv-15.1.0
+# Get virtualenv for Python 3
 wget https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz#md5=44e19f4134906fe2d75124427dc9b716
 tar -zxvf virtualenv-15.1.0.tar.gz
 
-# Install virtualenv-15.1.0
+# Install virtualenv for Python 3
 cd virtualenv-15.1.0/
-../Python-2.7.18/.localpython/bin/python setup.py install
+../Python3/.localpython/bin/python3 setup.py install
 
 # Create virtual environment "easymap-env"
-../Python-2.7.18/.localpython/bin/python virtualenv.py easymap-env -p ../Python-2.7.18/.localpython/bin/python
-
-# Install Pillow with pip
-[ -d cache ] || mkdir cache
-easymap-env/bin/pip -qq install Pillow --cache-dir cache
+../Python3/.localpython/bin/python3 virtualenv.py easymap-env -p ../Python3/.localpython/bin/python3
 
 cd ../..
 
 ################################################################################
 
-# Change permissions to the easymap folder and subfolders so Easymap can be used both from the
+# Change permissions to the Easymap folder and subfolders so Easymap can be used both from the
 # web interface (server user -- e.g. www-data) and the command line of any user
 sudo chmod -R 777 .
-
-# In file 'easymap', set absolute path to the Python binaries of the virtual environment
-# Rest of Python scripts don't need this because are executed after easymap.sh activates the virtual environment
-#sed -i -e "s~ABS_PATH_ENV_PYTHON~${PWD}/src/Python-2.7.18/.localpython/bin/python2~g" easymap
 
 ################################################################################
 
@@ -136,44 +130,44 @@ rm -rf user_projects/*
 
 if [ "$run_result" == "Easymap analysis properly completed." ]; then
 
-	# Set easymap dedicated  HTTP CGI server to run always in the background
-	if [ $1 == server ]; then
-		
-		# Run server in the background
-		nohup ./src/Python-2.7.18/.localpython/bin/python2 -m CGIHTTPServer $port &
-		
-		# Modify/create the etc/crontab file to always start easymap server at bootup
-		echo "@reboot   root    cd $PWD; ./src/Python-2.7.18/.localpython/bin/python2 -m CGIHTTPServer $port" >> /etc/crontab
+    # Set easymap dedicated HTTP CGI server to run always in the background
+    if [ $1 == server ]; then
+        
+        # Run server in the background using Python 3
+        nohup ./src/Python3/.localpython/bin/python3 -m http.server $port &
+        
+        # Modify/create the etc/crontab file to always start easymap server at bootup
+        echo "@reboot   root    cd $PWD; ./src/Python3/.localpython/bin/python3 -m http.server $port" >> /etc/crontab
 
-		# Save port number to /config/port for future reference for the user
-		echo $port > config/port
+        # Save port number to /config/port for future reference for the user
+        echo $port > config/port
 
-	fi
+    fi
 
-	echo " "
-	echo " "
-	echo "###################################################################################"
-	echo "#                                                                                 #"
-	echo "#                                                                                 #"
-	echo "#                   Easymap installation successfully completed                   #"
-	echo "#                                                                                 #"
-	echo "#                                                                                 #"
-	echo "###################################################################################"
-	echo " "
-	echo " "
+    echo " "
+    echo " "
+    echo "###################################################################################"
+    echo "#                                                                                 #"
+    echo "#                                                                                 #"
+    echo "#                   Easymap installation successfully completed                   #"
+    echo "#                                                                                 #"
+    echo "#                                                                                 #"
+    echo "###################################################################################"
+    echo " "
+    echo " "
 
 else
 
-	echo " "
-	echo " "
-	echo "###################################################################################"
-	echo "#                                                                                 #"
-	echo "#                                                                                 #"
-	echo "#                          Easymap installation failed                            #"
-	echo "#                                                                                 #"
-	echo "#                                                                                 #"
-	echo "###################################################################################"
-	echo " "
-	echo " "
+    echo " "
+    echo " "
+    echo "###################################################################################"
+    echo "#                                                                                 #"
+    echo "#                                                                                 #"
+    echo "#                          Easymap installation failed                            #"
+    echo "#                                                                                 #"
+    echo "#                                                                                 #"
+    echo "###################################################################################"
+    echo " "
+    echo " "
 
 fi
